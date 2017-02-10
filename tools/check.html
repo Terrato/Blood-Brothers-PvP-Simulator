@@ -21,8 +21,15 @@
 
     <script src="../compiled.js"></script>
     <script src="check.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="srcdb.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        var srcdb;
+        function foo(data) {
+            srcdb = JSON.parse(data);
+        }
+    </script>
+
+    <script src="https://bloodbrothers.herokuapp.com/?callback=foo"></script>
 
     <script>
         checkSkill(srcdb.skills);

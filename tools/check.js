@@ -14,12 +14,20 @@ function checkSkill(data) {
         src[id] = data[i];
     }
 
+    var whiteList = [
+        202, // Trial by Fire
+        355, 452, 816, 840, 881, 1008, 1076, 1115, 1141, 1158, 1187, 1220 // ondeath
+    ];
+
     for (var key in SkillDatabase) {
         if (SkillDatabase.hasOwnProperty(key)) {
             if (!src[key]) {
                 div.innerHTML += ("Not found: " + key + " - " + SkillDatabase[key].name + "<br>");
             }
             else {
+                if (whiteList.indexOf(+key) !== -1)
+                    continue;
+
                 var dbS = SkillDatabase[key];
                 var sheetS = src[key];
                 var conflict = false;
@@ -71,7 +79,14 @@ function checkFam(data) {
         "Chiyome, the Kamaitachi II",          // space in name
         "Ankou, Harbinger of Death II",        // space in name
         "Tanba, Founder of the Ninja II",      // space in name
-        "Wyrm Warden, Everwakeful II"          // space in name
+        "Wyrm Warden, Everwakeful II",         // space in name
+        "Valafar, Inferno Vanquisher",         // bloodlinked
+        "Adamant Tarasca",                     // bloodlinked
+        "Ilya, Giant Slayer",                  // bloodlinked
+        "Crom Cruach, the Silver Moon",        // bloodlinked
+        "Haagenti, Lord of Beasts",            // bloodlinked
+        "Charybdis II",                        // weird error, forgot what it was...
+        "Huitzilopochtli, God of War II",      // another one with weird error...
     ];
 
     // check with our db
@@ -109,6 +124,15 @@ function checkFam(data) {
                 if ((famDb.autoAttack && (famSrc.defaultSkillId == 0)) ||
                     (!famDb.autoAttack && (famSrc.defaultSkillId != 0)) ||
                     (famDb.autoAttack && (famSrc.defaultSkillId != 0) && (famDb.autoAttack != famSrc.defaultSkillId)))
+                    conflict = true;
+
+                if (famDb.rarity !== famSrc.rarity)
+                    conflict = true;
+
+                if (famDb.evo !== famSrc.evolution)
+                    conflict = true;
+
+                if (famSrc.passiveSkillId1 !== 0 && (!famDb.passiveSkills || famDb.passiveSkills[0] !== famSrc.passiveSkillId1))
                     conflict = true;
 
                 if (conflict) {
